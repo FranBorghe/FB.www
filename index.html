@@ -5,23 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Francesco Borghetti — TPS</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg: #000000;
-      --surface: #161614;
-      --card: #1c1c1a;
-      --border: #2c2c28;
-      --accent: #e8c97d;
-      --accent2: #c4a45a;
-      --text: #f0ede8;
-      --muted: #7a7870;
-      --hover: #232320;
+  <style>
+
+    /* reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    html { scroll-behavior: smooth; }
+    /* variabili colore */
+    :root {
+      --bg:      #000000;
+      --card:    #1c1c1a;
+      --border:  #2c2c28;
+      --accent:  #e8c97d;
+      --accent2: #c4a45a;
+      --text:    #f0ede8;
+      --muted:   #7a7870;
+      --hover:   #232320;
+    }
 
+    /* sfondo */
     body {
       background: var(--bg);
       color: var(--text);
@@ -31,27 +37,21 @@
       overflow-x: hidden;
     }
 
-    /* vignette rimossa per sfondo a tinta unita */
-    body::after {
-      content: '';
+    /* alone dorato in alto a destra */
+    .blob {
       position: fixed;
-      inset: 0;
-      background: none;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,201,125,0.14) 0%, transparent 70%);
+      top: -200px;
+      right: -200px;
       pointer-events: none;
-      z-index: 0;
+      z-index: 1;
+      animation: blobFloat 8s ease-in-out infinite alternate;
     }
 
-    /* ── NOISE OVERLAY DISABILITATO (sfondo a tinta unita) ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: none;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── HEADER ── */
+    /* intestazione */
     header {
       position: relative;
       z-index: 10;
@@ -64,7 +64,11 @@
       animation: fadeDown 0.8s ease both;
     }
 
-    .header-left { display: flex; flex-direction: column; gap: 0.3rem; }
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
 
     .tag {
       font-size: 0.65rem;
@@ -92,7 +96,6 @@
       letter-spacing: -0.02em;
       color: var(--text);
     }
-
     h1 span { color: var(--accent); }
 
     .header-right {
@@ -102,7 +105,7 @@
       line-height: 1.8;
     }
 
-    /* ── HERO STRIP ── */
+    /* hero (titolo + statistiche) */
     .hero {
       position: relative;
       z-index: 5;
@@ -129,6 +132,7 @@
       max-width: 38ch;
     }
 
+    /* box statistiche */
     .hero-stat {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -161,7 +165,7 @@
       letter-spacing: 0.1em;
     }
 
-    /* ── SECTION ── */
+    /* contenuto principale */
     main {
       position: relative;
       z-index: 5;
@@ -192,7 +196,7 @@
       letter-spacing: 0.08em;
     }
 
-    /* ── TOPIC BLOCK ── */
+    /* argomento */
     .topic {
       animation: fadeUp 0.6s ease both;
     }
@@ -223,7 +227,7 @@
       letter-spacing: 0.06em;
     }
 
-    /* ── EXERCISE LIST ── */
+    /* lista esercizi */
     .ex-list {
       display: flex;
       flex-direction: column;
@@ -232,6 +236,7 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
+      margin-bottom: 1px;
     }
 
     .ex-item {
@@ -246,7 +251,10 @@
     }
 
     .ex-item:hover { background: var(--hover); }
-    .ex-item:hover .ex-arrow { transform: translate(3px, -3px); color: var(--accent); }
+    .ex-item:hover .ex-arrow {
+      transform: translate(3px, -3px);
+      color: var(--accent);
+    }
 
     .ex-num {
       font-family: 'Playfair Display', serif;
@@ -257,11 +265,7 @@
       font-weight: 700;
     }
 
-    .ex-title {
-      flex: 1;
-      font-size: 0.95rem;
-      font-weight: 400;
-    }
+    .ex-title { flex: 1; font-size: 0.95rem; font-weight: 400; }
 
     .ex-date {
       font-size: 0.72rem;
@@ -275,17 +279,7 @@
       transition: transform 0.2s ease, color 0.2s ease;
     }
 
-    .ex-empty {
-      border: 1.5px dashed var(--border);
-      border-radius: 14px;
-      padding: 2.5rem;
-      text-align: center;
-      font-size: 0.82rem;
-      color: var(--muted);
-      opacity: 0.5;
-    }
-
-    /* ── FOOTER ── */
+    /* piè di pagina */
     footer {
       position: relative;
       z-index: 5;
@@ -304,21 +298,7 @@
       color: var(--text);
     }
 
-    /* ── GLOW BLOB ── */
-    .blob {
-      position: fixed;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(232,201,125,0.14) 0%, transparent 70%);
-      top: -200px;
-      right: -200px;
-      pointer-events: none;
-      z-index: 1;
-      animation: blobFloat 8s ease-in-out infinite alternate;
-    }
-
-    /* ── ANIMATIONS ── */
+    /* animazioni */
     @keyframes fadeDown {
       from { opacity: 0; transform: translateY(-20px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -328,24 +308,26 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes blobFloat {
-      from { transform: translate(0,0) scale(1); }
+      from { transform: translate(0, 0) scale(1); }
       to   { transform: translate(-40px, 60px) scale(1.1); }
     }
 
-    /* ── RESPONSIVE ── */
+    /* responsive */
     @media (max-width: 768px) {
       header, main, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
       .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem; gap: 2rem; }
       .hero-stat { grid-template-columns: 1fr 1fr; }
       .ex-date { display: none; }
     }
+
   </style>
 </head>
 <body>
 
+  <!-- alone decorativo -->
   <div class="blob"></div>
 
-  <!-- HEADER -->
+  <!-- intestazione -->
   <header>
     <div class="header-left">
       <span class="tag">TPS — Tecnologie e Progettazione</span>
@@ -357,7 +339,7 @@
     </div>
   </header>
 
-  <!-- HERO -->
+  <!-- hero -->
   <section class="hero">
     <div class="hero-text">
       <h2>Raccolta degli<br>esercizi svolti</h2>
@@ -375,20 +357,21 @@
     </div>
   </section>
 
-  <!-- MAIN -->
+  <!-- esercizi -->
   <main>
-
     <div>
       <div class="section-header">
         <span class="section-title">Argomenti</span>
         <span class="section-count" id="label-count">0 esercizi</span>
       </div>
-       <div class="topic">
+
+      <!-- ES02 -->
+      <div class="topic">
         <div class="topic-header">
           <span class="topic-name">ES02</span>
           <span class="topic-count"></span>
         </div>
-          <div class="ex-list">
+        <div class="ex-list">
           <a class="ex-item" href="ES02.html">
             <span class="ex-num">01</span>
             <span class="ex-title">A</span>
@@ -396,8 +379,10 @@
             <span class="ex-arrow">↗</span>
           </a>
         </div>
-       </div>
-          <div class="topic">
+      </div>
+
+      <!-- ES03 -->
+      <div class="topic">
         <div class="topic-header">
           <span class="topic-name">ES03</span>
           <span class="topic-count"></span>
@@ -409,34 +394,31 @@
             <span class="ex-date">27 Feb 2026</span>
             <span class="ex-arrow">↗</span>
           </a>
-        </div>
-          <div class="ex-list">
           <a class="ex-item" href="ES03/ES03-2.html">
             <span class="ex-num">02</span>
             <span class="ex-title">B</span>
             <span class="ex-date">27 Feb 2026</span>
             <span class="ex-arrow">↗</span>
           </a>
-        </div>
-          <div class="ex-list">
           <a class="ex-item" href="ES03/ES03-3.html">
             <span class="ex-num">03</span>
             <span class="ex-title">C</span>
             <span class="ex-date">27 Feb 2026</span>
             <span class="ex-arrow">↗</span>
           </a>
-        
+        </div>
       </div>
-       
+
     </div>
   </main>
 
-  <!-- FOOTER -->
+  <!-- piè di pagina -->
   <footer>
     <span class="footer-name">Francesco Borghetti</span>
     <span>Tutti i diritti riservati © 2026</span>
   </footer>
 
+  <!-- contatori automatici -->
   <script>
     const allEx = document.querySelectorAll('.ex-item');
     const total = allEx.length;
@@ -446,12 +428,12 @@
       total === 0 ? 'Nessun esercizio' :
       total === 1 ? '1 esercizio' : `${total} esercizi`;
 
-    // Aggiorna contatore per ogni argomento
     document.querySelectorAll('.topic').forEach(topic => {
       const n = topic.querySelectorAll('.ex-item').length;
       const el = topic.querySelector('.topic-count');
       if (el) el.textContent = n === 1 ? '1 esercizio' : `${n} esercizi`;
     });
   </script>
+
 </body>
 </html>
