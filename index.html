@@ -1,46 +1,410 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FRANCESCO BORGHETTI - Classe 4CINF</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Francesco Borghetti — TPS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #000000;
+      --surface: #161614;
+      --card: #1c1c1a;
+      --border: #2c2c28;
+      --accent: #e8c97d;
+      --accent2: #c4a45a;
+      --text: #f0ede8;
+      --muted: #7a7870;
+      --hover: #232320;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: none;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: none;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 3rem 4rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    .header-left { display: flex; flex-direction: column; gap: 0.3rem; }
+
+    .tag {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .tag::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    h1 span { color: var(--accent); }
+
+    .header-right {
+      text-align: right;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+ 
+    .hero {
+      position: relative;
+      z-index: 5;
+      padding: 5rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      animation: fadeUp 0.9s 0.2s ease both;
+    }
+
+    .hero-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      font-weight: 400;
+      line-height: 1.3;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-text p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 38ch;
+    }
+
+    .hero-stat {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .stat-box {
+      background: var(--card);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .stat-box .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-box .label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+ 
+    main {
+      position: relative;
+      z-index: 5;
+      padding: 0 4rem 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .section-count {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+
+    .topic {
+      animation: fadeUp 0.6s ease both;
+    }
+    .topic:nth-child(1) { animation-delay: 0.15s; }
+    .topic:nth-child(2) { animation-delay: 0.25s; }
+    .topic:nth-child(3) { animation-delay: 0.35s; }
+    .topic:nth-child(4) { animation-delay: 0.45s; }
+    .topic:nth-child(5) { animation-delay: 0.55s; }
+
+    .topic-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topic-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .topic-count {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    .ex-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .ex-item {
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1.1rem 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.18s ease;
+    }
+
+    .ex-item:hover { background: var(--hover); }
+    .ex-item:hover .ex-arrow { transform: translate(3px, -3px); color: var(--accent); }
+
+    .ex-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      color: var(--accent);
+      opacity: 0.7;
+      min-width: 2rem;
+      font-weight: 700;
+    }
+
+    .ex-title {
+      flex: 1;
+      font-size: 0.95rem;
+      font-weight: 400;
+    }
+
+    .ex-date {
+      font-size: 0.72rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .ex-arrow {
+      color: var(--muted);
+      font-size: 1rem;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .ex-empty {
+      border: 1.5px dashed var(--border);
+      border-radius: 14px;
+      padding: 2.5rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+
+    footer {
+      position: relative;
+      z-index: 5;
+      padding: 2rem 4rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .footer-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+
+    .blob {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,201,125,0.14) 0%, transparent 70%);
+      top: -200px;
+      right: -200px;
+      pointer-events: none;
+      z-index: 1;
+      animation: blobFloat 8s ease-in-out infinite alternate;
+    }
+
+ 
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blobFloat {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(-40px, 60px) scale(1.1); }
+    }
+
+    
+    @media (max-width: 768px) {
+      header, main, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem; gap: 2rem; }
+      .hero-stat { grid-template-columns: 1fr 1fr; }
+      .ex-date { display: none; }
+    }
+  </style>
 </head>
 <body>
-    <h1>Benvenuto/a FRANCESCO BORGHETTI!</h1>
-    <p>Questa è la tua area web personale.</p>
-    <p>Classe: 4CINF</p>
-    <p>Username: borghhetti.francesco</p>
-    
-    <div class="example-section">
-        <h2>🛠️ Strumenti Disponibili</h2>
-        <ul>
-            <li><a href="adminer.php" target="_blank">🗄️ Adminer Personale</a></li>
-            <li><a href="/adminer.php" target="_blank">🌐 Adminer Globale</a></li>
-            <li><a href="info.php" target="_blank">ℹ️ Informazioni PHP</a></li>
-            <li><a href="style.css" target="_blank">📄 Foglio CSS</a></li>
-            <li><a href="script.js" target="_blank">🔧 JavaScript</a></li>
-        </ul>
+
+  <div class="blob"></div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <span class="tag">TPS — Tecnologie e Progettazione</span>
+      <h1>Francesco <span>Borghetti</span></h1>
     </div>
-    
-    <div class="example-section">
-        <h2>📁 Tipi di File Supportati</h2>
-        <p>Il tuo sito web supporta tutti questi tipi di file:</p>
-        <ul>
-            <li>📄 HTML (.html) - Pagine web</li>
-            <li>🐘 PHP (.php) - Scripting server-side</li>
-            <li>🎨 CSS (.css) - Fogli di stile</li>
-            <li>⚡ JavaScript (.js) - Scripting client-side</li>
-            <li>🖼️ Immagini (.jpg, .png, .gif, .svg)</li>
-            <li>📋 Documenti (.txt, .pdf)</li>
-            <li>⚙️ Configurazioni (.xml, .json)</li>
-        </ul>
+    <div class="header-right">
+      Anno Scolastico 2025 / 2026<br>
+      Esercizi &amp; Lavori Svolti
     </div>
-    
-    <hr>
-    <p>Puoi modificare questo file per creare il tuo sito web.</p>
-    <p>File location: ~/www/index.html</p>
-    
-    <script src="script.js"></script>
+  </header>
+
+
+  <section class="hero">
+    <div class="hero-text">
+      <h2>Raccolta degli<br>esercizi svolti</h2>
+      <p>In questa pagina trovi tutti i link agli esercizi completati, organizzati per argomento. Clicca su un esercizio per aprire il relativo elaborato.</p>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-box">
+        <span class="num" id="count-total">0</span>
+        <span class="label">Esercizi totali</span>
+      </div>
+      <div class="stat-box">
+        <span class="num">25/26</span>
+        <span class="label">Anno scolastico</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main>
+
+    <div>
+      <div class="section-header">
+        <span class="section-title">Argomenti</span>
+        <span class="section-count" id="label-count">0 esercizi</span>
+      </div>
+    </div>
+  </main>
+
+
+  <footer>
+    <span class="footer-name">Francesco Borghetti</span>
+    <span>Tutti i diritti riservati © 2026</span>
+  </footer>
+
+  <script>
+    const allEx = document.querySelectorAll('.ex-item');
+    const total = allEx.length;
+
+    document.getElementById('count-total').textContent = total;
+    document.getElementById('label-count').textContent =
+      total === 0 ? 'Nessun esercizio' :
+      total === 1 ? '1 esercizio' : `${total} esercizi`;
+
+    // Aggiorna contatore per ogni argomento
+    document.querySelectorAll('.topic').forEach(topic => {
+      const n = topic.querySelectorAll('.ex-item').length;
+      const el = topic.querySelector('.topic-count');
+      if (el) el.textContent = n === 1 ? '1 esercizio' : `${n} esercizi`;
+    });
+  </script>
 </body>
 </html>
