@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Calcolo Volume Scatola</title>
+</head>
+<body>
+    <h1>Calcolo Volume Scatola</h1>
+    <p>Apri la console del browser (F12) per vedere il risultato.</p>
+
+    <script>
+        let larghezza = parseFloat(prompt("Inserisci la larghezza della scatola (cm):"));
+        let altezza = parseFloat(prompt("Inserisci l'altezza della scatola (cm):"));
+        let lunghezza = parseFloat(prompt("Inserisci la lunghezza della scatola (cm):"));
+
+        
+        if (isNaN(larghezza) || isNaN(altezza) || isNaN(lunghezza)) {
+            console.log("Errore: inserisci solo valori numerici!");
+        } else {
+            
+            let volume = larghezza * altezza * lunghezza;
+
+            
+            console.log(" Dimensioni della scatola:");
+            console.log("  Larghezza: " + larghezza + " cm");
+            console.log("  Altezza:   " + altezza + " cm");
+            console.log("  Lunghezza: " + lunghezza + " cm");
+            console.log("  Volume della scatola: " + volume + " cm³");
+        }
+    </script>
+</body>
