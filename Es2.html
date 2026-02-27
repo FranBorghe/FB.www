@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Calcolo Retta y = mx + c</title>
+</head>
+<body>
+    <h1>Calcolo Retta y = mx + c</h1>
+    <p>Apri la console del browser (F12) per vedere i risultati.</p>
+
+    <script>
+        let m = parseFloat(prompt("Inserisci il coefficiente angolare m:"));
+        let c = parseFloat(prompt("Inserisci il termine noto c:"));
+
+        if (isNaN(m) || isNaN(c)) {
+            console.log("Errore: inserisci solo valori numerici!");
+        } else {
+
+            console.log("Retta: y = " + m + "x + " + c);
+
+            let y_meno1 = m * (-1) + c;
+            console.log("Punto con x = -1: P(-1 ; " + y_meno1 + ")");
+
+            let y_10 = m * 10 + c;
+            console.log("Punto con x = 10: P(10 ; " + y_10 + ")");
+
+            let interY = c;
+            console.log("Intersezione con asse Y (x=0): P(0 ; " + interY + ")");
+
+            if (m === 0) {
+                if (c === 0) {
+                    console.log("Intersezione con asse X: la retta coincide con l'asse X");
+                } else {
+                    console.log("Intersezione con asse X: la retta e parallela all'asse X, nessuna intersezione");
+                }
+            } else {
+                let interX = -c / m;
+                console.log("Intersezione con asse X (y=0): P(" + interX + " ; 0)");
+            }
+        }
+    </script>
+</body>
+</html>
