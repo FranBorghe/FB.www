@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Esito Scolastico</title>
+</head>
+<body>
+    <h1>Esito Scolastico</h1>
+    <p>Apri la console del browser (F12) per vedere il risultato.</p>
+
+    <script>
+        let voto = parseFloat(prompt("Inserisci il voto:"));
+
+        let esito = voto >= 6 ? "Promosso" : "Bocciato";
+
+        console.log("Voto: " + voto);
+        console.log("Esito: " + esito);
+    </script>
+</body>
+</html>
