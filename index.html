@@ -8,14 +8,12 @@
 
   <style>
 
-    /* reset */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    /* variabili colore */
     :root {
       --bg:      #000000;
       --card:    #1c1c1a;
@@ -27,7 +25,6 @@
       --hover:   #232320;
     }
 
-    /* sfondo */
     body {
       background: var(--bg);
       color: var(--text);
@@ -37,7 +34,6 @@
       overflow-x: hidden;
     }
 
-    /* alone dorato in alto a destra */
     .blob {
       position: fixed;
       width: 600px;
@@ -51,7 +47,6 @@
       animation: blobFloat 8s ease-in-out infinite alternate;
     }
 
-    /* intestazione */
     header {
       position: relative;
       z-index: 10;
@@ -105,7 +100,6 @@
       line-height: 1.8;
     }
 
-    /* hero (titolo + statistiche) */
     .hero {
       position: relative;
       z-index: 5;
@@ -132,7 +126,6 @@
       max-width: 38ch;
     }
 
-    /* box statistiche */
     .hero-stat {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -165,7 +158,6 @@
       letter-spacing: 0.1em;
     }
 
-    /* contenuto principale */
     main {
       position: relative;
       z-index: 5;
@@ -191,12 +183,18 @@
     }
 
     .section-count {
-      font-size: 0.75rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(232,201,125,0.3);
+      background: rgba(232,201,125,0.07);
+      padding: 5px 14px;
+      border-radius: 100px;
     }
 
-    /* argomento */
+    /* TOPIC */
     .topic {
       animation: fadeUp 0.6s ease both;
     }
@@ -208,78 +206,158 @@
 
     .topic-header {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       gap: 1rem;
-      margin-bottom: 1.2rem;
-      padding-bottom: 0.8rem;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.4rem;
     }
 
-    .topic-name {
+    .topic-tag {
       font-family: 'Playfair Display', serif;
       font-size: 1.4rem;
       font-weight: 700;
-    }
-
-    .topic-count {
-      font-size: 0.72rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-    }
-
-    /* lista esercizi */
-    .ex-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      margin-bottom: 1px;
-    }
-
-    .ex-item {
-      background: var(--card);
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-      padding: 1.1rem 1.5rem;
-      text-decoration: none;
-      color: inherit;
-      transition: background 0.18s ease;
-    }
-
-    .ex-item:hover { background: var(--hover); }
-    .ex-item:hover .ex-arrow {
-      transform: translate(3px, -3px);
-      color: var(--accent);
-    }
-
-    .ex-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.85rem;
-      color: var(--accent);
-      opacity: 0.7;
-      min-width: 2rem;
-      font-weight: 700;
-    }
-
-    .ex-title { flex: 1; font-size: 0.95rem; font-weight: 400; }
-
-    .ex-date {
-      font-size: 0.72rem;
-      color: var(--muted);
+      letter-spacing: -0.01em;
+      color: var(--text);
       white-space: nowrap;
     }
 
-    .ex-arrow {
-      color: var(--muted);
-      font-size: 1rem;
-      transition: transform 0.2s ease, color 0.2s ease;
+    .topic-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
     }
 
-    /* piè di pagina */
+    .topic-count {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 6px;
+    }
+
+    /* EXERCISE LIST — vertical */
+    .ex-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 2.4rem;
+    }
+
+    .ex-item {
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 28px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.22s, background 0.22s, transform 0.18s, box-shadow 0.22s;
+    }
+
+    .ex-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(232,201,125,0.06) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .ex-item:hover {
+      border-color: rgba(232,201,125,0.55);
+      background: rgba(232,201,125,0.04);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(232,201,125,0.1);
+    }
+
+    .ex-item:hover::after { opacity: 1; }
+
+    /* lettera sinistra */
+    .ex-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+      transition: color 0.22s, text-shadow 0.22s;
+      text-align: center;
+    }
+
+    .ex-item:hover .ex-letter {
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(232,201,125,0.5);
+    }
+
+    /* divisore verticale */
+    .ex-divider {
+      position: absolute;
+      left: 76px;
+      top: 16px;
+      bottom: 16px;
+      width: 1px;
+      background: var(--border);
+      transition: background 0.22s;
+    }
+
+    .ex-item:hover .ex-divider {
+      background: rgba(232,201,125,0.25);
+    }
+
+    /* contenuto centrale */
+    .ex-body {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ex-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+    }
+
+    .ex-item:hover .ex-title {
+      color: var(--accent);
+    }
+
+    .ex-date {
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* freccia destra */
+    .ex-arrow {
+      font-size: 1rem;
+      color: var(--muted);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .ex-item:hover .ex-arrow {
+      color: var(--accent);
+      transform: translate(3px, -3px);
+    }
+
     footer {
       position: relative;
       z-index: 5;
@@ -298,7 +376,6 @@
       color: var(--text);
     }
 
-    /* animazioni */
     @keyframes fadeDown {
       from { opacity: 0; transform: translateY(-20px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -312,22 +389,19 @@
       to   { transform: translate(-40px, 60px) scale(1.1); }
     }
 
-    /* responsive */
     @media (max-width: 768px) {
       header, main, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
       .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem; gap: 2rem; }
       .hero-stat { grid-template-columns: 1fr 1fr; }
-      .ex-date { display: none; }
+      .ex-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
     }
 
   </style>
 </head>
 <body>
 
-  <!-- alone decorativo -->
   <div class="blob"></div>
 
-  <!-- intestazione -->
   <header>
     <div class="header-left">
       <span class="tag">TPS — Tecnologie e Progettazione</span>
@@ -339,7 +413,6 @@
     </div>
   </header>
 
-  <!-- hero -->
   <section class="hero">
     <div class="hero-text">
       <h2>Raccolta degli<br>esercizi svolti</h2>
@@ -357,7 +430,6 @@
     </div>
   </section>
 
-  <!-- esercizi -->
   <main>
     <div>
       <div class="section-header">
@@ -368,14 +440,18 @@
       <!-- ES02 -->
       <div class="topic">
         <div class="topic-header">
-          <span class="topic-name">ES02</span>
+          <span class="topic-tag">ES02</span>
           <span class="topic-count"></span>
+          <div class="topic-line"></div>
         </div>
-        <div class="ex-list">
+        <div class="ex-grid">
           <a class="ex-item" href="ES02/ES02-0.html">
-            <span class="ex-num">01</span>
-            <span class="ex-title">A</span>
-            <span class="ex-date">27 Feb 2026</span>
+            <span class="ex-letter">A</span>
+            <div class="ex-divider"></div>
+            <div class="ex-body">
+              <span class="ex-title">Esercizio A</span>
+              <span class="ex-date">27 Feb 2026</span>
+            </div>
             <span class="ex-arrow">↗</span>
           </a>
         </div>
@@ -384,50 +460,65 @@
       <!-- ES03 -->
       <div class="topic">
         <div class="topic-header">
-          <span class="topic-name">ES03</span>
+          <span class="topic-tag">ES03</span>
           <span class="topic-count"></span>
+          <div class="topic-line"></div>
         </div>
-        <div class="ex-list">
+        <div class="ex-grid">
           <a class="ex-item" href="ES03/ES03-1.html">
-            <span class="ex-num">01</span>
-            <span class="ex-title">A</span>
-            <span class="ex-date">27 Feb 2026</span>
+            <span class="ex-letter">A</span>
+            <div class="ex-divider"></div>
+            <div class="ex-body">
+              <span class="ex-title">Esercizio A</span>
+              <span class="ex-date">27 Feb 2026</span>
+            </div>
             <span class="ex-arrow">↗</span>
           </a>
           <a class="ex-item" href="ES03/ES03-2.html">
-            <span class="ex-num">02</span>
-            <span class="ex-title">B</span>
-            <span class="ex-date">27 Feb 2026</span>
+            <span class="ex-letter">B</span>
+            <div class="ex-divider"></div>
+            <div class="ex-body">
+              <span class="ex-title">Esercizio B</span>
+              <span class="ex-date">27 Feb 2026</span>
+            </div>
             <span class="ex-arrow">↗</span>
           </a>
           <a class="ex-item" href="ES03/ES03-3.html">
-            <span class="ex-num">03</span>
-            <span class="ex-title">C</span>
-            <span class="ex-date">27 Feb 2026</span>
+            <span class="ex-letter">C</span>
+            <div class="ex-divider"></div>
+            <div class="ex-body">
+              <span class="ex-title">Esercizio C</span>
+              <span class="ex-date">27 Feb 2026</span>
+            </div>
             <span class="ex-arrow">↗</span>
           </a>
         </div>
       </div>
 
-  <!-- ES04 -->
+      <!-- ES04 -->
       <div class="topic">
         <div class="topic-header">
-          <span class="topic-name">ES04</span>
+          <span class="topic-tag">ES04</span>
           <span class="topic-count"></span>
+          <div class="topic-line"></div>
         </div>
-        <div class="ex-list">
+        <div class="ex-grid">
           <a class="ex-item" href="ES04/ES04-B.html">
-            <span class="ex-num">01</span>
-            <span class="ex-title">B</span>
-            <span class="ex-date">27 Feb 2026</span>
+            <span class="ex-letter">B</span>
+            <div class="ex-divider"></div>
+            <div class="ex-body">
+              <span class="ex-title">Esercizio B</span>
+              <span class="ex-date">27 Feb 2026</span>
+            </div>
             <span class="ex-arrow">↗</span>
           </a>
-        </div>
-         <div class="ex-list">
           <a class="ex-item" href="ES04/ES04-C.html">
-            <span class="ex-num">02</span>
-            <span class="ex-title">C</span>
-            <span class="ex-date">10 Mar 2026</span>
+            <span class="ex-letter">C</span>
+            <div class="ex-divider"></div>
+            <div class="ex-body">
+              <span class="ex-title">Esercizio C</span>
+              <span class="ex-date">10 Mar 2026</span>
+            </div>
             <span class="ex-arrow">↗</span>
           </a>
         </div>
@@ -436,13 +527,11 @@
     </div>
   </main>
 
-  <!-- piè di pagina -->
   <footer>
     <span class="footer-name">Francesco Borghetti</span>
     <span>Tutti i diritti riservati © 2026</span>
   </footer>
 
-  <!-- contatori automatici -->
   <script>
     const allEx = document.querySelectorAll('.ex-item');
     const total = allEx.length;
