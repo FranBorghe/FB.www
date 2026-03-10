@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Calcolatrice Semplice</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:      #0f0f0f;
+            --surface: #1a1a1a;
+            --border:  #2e2e2e;
+            --accent:  #d4aa2a;
+            --text:    #f0f0f0;
+            --muted:   #666;
+            --error:   #ff5f5f;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(212,170,42,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212,170,42,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        .wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .field { margin-bottom: 1.2rem; }
+        label {
+            display: block;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input[type="text"]:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(212,170,42,0.15);
+        }
+        input[type="text"]::placeholder { color: #3a3a3a; }
+
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        /* Bottoni operazione */
+        .ops {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .op-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.6rem 0;
+            font-family: 'DM Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .op-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .op-btn.active {
+            border-color: var(--accent);
+            background: rgba(212,170,42,0.1);
+            color: var(--accent);
+        }
+
+        /* Riquadro operazione selezionata */
+        .display-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            min-height: 2.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #3a3a3a;
+            font-size: 0.85rem;
+            transition: border-color 0.2s;
+        }
+        .display-box.filled {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+        .display-box .op-symbol {
+            font-size: 1.3rem;
+            color: var(--accent);
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            min-width: 1.2rem;
+            text-align: center;
+        }
+
+        /* Pulsante calcola */
+        button[type="submit"] {
+            width: 100%;
+            background: var(--accent);
+            color: #0f0f0f;
+            border: none;
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(212,170,42,0.3);
+        }
+        button[type="submit"]:active { transform: translateY(0); }
+
+        /* Riquadro risultato */
+        #result {
+            margin-top: 1.2rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            min-height: 2.8rem;
+            display: flex;
+            align-items: center;
+        }
+        #result:empty::before {
+            content: 'Il risultato apparirà qui';
+            color: #3a3a3a;
+            font-size: 0.85rem;
+        }
+
+        .result-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.3rem;
+        }
+        .result-value {
+            font-size: 1.6rem;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+        }
+        .result-expr {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 0.2rem;
+        }
+
+        .error-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--error);
+            margin-bottom: 0.3rem;
+        }
+        .error-msg { font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <form id="calculatorForm" onsubmit="calcola(); return false;">
+
+                <div class="row">
+                    <div class="field">
+                        <label for="num1">Primo numero</label>
+                        <input type="text" id="num1" placeholder="es. 42" required>
+                    </div>
+                    <div class="field">
+                        <label for="num2">Secondo numero</label>
+                        <input type="text" id="num2" placeholder="es. 7" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Operazione</label>
+                    <!-- Bottoni per selezionare l'operazione -->
+                    <div class="ops">
+                        <button type="button" class="op-btn" onclick="selezionaOp(this, '+')">+</button>
+                        <button type="button" class="op-btn" onclick="selezionaOp(this, '-')">−</button>
+                        <button type="button" class="op-btn" onclick="selezionaOp(this, '*')">×</button>
+                        <button type="button" class="op-btn" onclick="selezionaOp(this, '/')">÷</button>
+                        <button type="button" class="op-btn" onclick="selezionaOp(this, '**')">^</button>
+                    </div>
+                    <!-- Riquadro che mostra l'operazione selezionata -->
+                    <div class="display-box" id="opDisplay">
+                        Nessuna operazione selezionata
+                    </div>
+                </div>
+
+                <!-- Campo nascosto che memorizza l'operazione scelta -->
+                <input type="hidden" id="operation">
+
+                <button type="submit">Calcola il risultato</button>
+            </form>
+
+            <!-- Riquadro risultato -->
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const nomiOperazioni = {
+            '+':  'Addizione',
+            '-':  'Sottrazione',
+            '*':  'Moltiplicazione',
+            '/':  'Divisione',
+            '**': 'Potenza'
+        };
+        const simboli = {
+            '+': '+', '-': '−', '*': '×', '/': '÷', '**': '^'
+        };
+
+        // Evidenzia il bottone scelto e aggiorna il riquadro operazione
+        function selezionaOp(btn, op) {
+            document.querySelectorAll('.op-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('operation').value = op;
+
+            const display = document.getElementById('opDisplay');
+            display.classList.add('filled');
+            display.innerHTML = `<span class="op-symbol">${simboli[op]}</span> ${nomiOperazioni[op]}`;
+        }
+
+        // Funzione chiamata al submit del form
+        function calcola() {
+            const num1Input = document.getElementById('num1').value;
+            const num2Input = document.getElementById('num2').value;
+            const operation = document.getElementById('operation').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            // Converte i valori in numeri decimali
+            const num1 = parseFloat(num1Input);
+            const num2 = parseFloat(num2Input);
+
+            // Verifica se i numeri sono validi
+            if (Number.isNaN(num1) || Number.isNaN(num2)) {
+                resultDiv.innerHTML = `<div><p class="error-label">Errore</p><p class="error-msg">Inserisci due numeri validi.</p></div>`;
+                return;
+            }
+
+            if (!operation) {
+                resultDiv.innerHTML = `<div><p class="error-label">Errore</p><p class="error-msg">Seleziona un'operazione.</p></div>`;
+                return;
+            }
+
+            let result;
+            try {
+                // Esegue l'operazione richiesta
+                switch (operation) {
+                    case '+':  result = num1 + num2; break;
+                    case '-':  result = num1 - num2; break;
+                    case '*':  result = num1 * num2; break;
+                    case '/':
+                        if (num2 === 0) throw new Error('Divisione per zero non consentita.');
+                        result = num1 / num2;
+                        break;
+                    case '**': result = num1 ** num2; break;
+                }
+
+                const display = parseFloat(result.toPrecision(10));
+                resultDiv.innerHTML = `
+                    <div>
+                        <p class="result-label">Risultato</p>
+                        <p class="result-value">${display}</p>
+                        <p class="result-expr">${num1} ${simboli[operation]} ${num2} = ${display}</p>
+                    </div>`;
+
+            } catch (error) {
+                resultDiv.innerHTML = `<div><p class="error-label">Errore</p><p class="error-msg">${error.message}</p></div>`;
+            }
+        }
+    </script>
+</body>
+</html>
