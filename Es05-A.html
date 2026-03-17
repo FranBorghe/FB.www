@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>PERSONA</h1>
+    <p>Apri la console del browser (F12) per vedere il risultato.</p>
+
+    <script>
+        let Nome = prompt("inserisci il nome: ");
+        let Cognome = prompt("inserisci il cognome: ");
+        let Eta = parseFloat(prompt("inserisci l'età: "));
+
+        if (isNaN(Eta)) {
+            console.log("Errore: inserisci un numero per l'età");
+        } else {
+            let Persona = {
+                nome: Nome,
+                cognome: Cognome, 
+                eta: Eta,
+            };
+            console.log(Persona);  
+        }
+    </script>
+</body>
+</html>
