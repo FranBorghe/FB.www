@@ -1,42 +1,154 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <title>Form Persona</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ES05-A — Oggetto Persona</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background-color: #1a1a1a;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 32px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      background: #252525;
+      border-radius: 16px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .field { margin-bottom: 1.4rem; }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: #888;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .field input {
+      width: 100%;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: #ccc;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field input::placeholder { color: #555; }
+    .field input:focus { border-color: #f5c518; }
+
+    .btn-main {
+      width: 100%;
+      padding: 16px;
+      background: #f5c518;
+      color: #1a1a1a;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-main:hover  { background: #ffd52e; }
+    .btn-main:active { transform: scale(0.98); }
+
+    .error {
+      font-size: 11px;
+      color: #e05252;
+      letter-spacing: 0.05em;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: #ccc;
+      margin-top: 1rem;
+      border-left: 3px solid #f5c518;
+      padding-left: 0.9rem;
+      line-height: 1.5;
+    }
+    .hint strong { color: #f5c518; }
+  </style>
 </head>
 <body>
 
-    <h2>Inserisci i tuoi dati</h2>
+  <div class="card">
 
-    <form id="personaForm">
-        <label>Nome:</label>
-        <input type="text" id="nome" required><br><br>
+    <!-- FORM -->
+    <div id="form-section">
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" id="nome" placeholder="es. Francesco" />
+      </div>
+      <div class="field">
+        <label>Cognome</label>
+        <input type="text" id="cognome" placeholder="es. Borghetti" />
+      </div>
+      <div class="field">
+        <label>Età</label>
+        <input type="number" id="eta" placeholder="es. 20" min="0" max="120" />
+      </div>
+      <button class="btn-main" onclick="creaPersona()">Crea oggetto persona</button>
+      <p class="error" id="errore">// Compila tutti i campi correttamente.</p>
+      <p class="hint">Dopo aver cliccato <strong>Crea oggetto persona</strong>, premi <strong>F12</strong> e apri la console del browser.</p>
+    </div>
 
-        <label>Cognome:</label>
-        <input type="text" id="cognome" required><br><br>
+  </div>
 
-        <label>Età:</label>
-        <input type="number" id="eta" required><br><br>
+  <script>
+    function creaPersona() {
+      const nome    = document.getElementById('nome').value.trim();
+      const cognome = document.getElementById('cognome').value.trim();
+      const etaRaw  = document.getElementById('eta').value.trim();
+      const errore  = document.getElementById('errore');
 
-        <button type="submit">Invia</button>
-    </form>
+      if (!nome || !cognome || !etaRaw || isNaN(etaRaw) || Number(etaRaw) < 0) {
+        errore.style.display = 'block';
+        return;
+      }
+      errore.style.display = 'none';
 
-    <script>
-        document.getElementById("personaForm").addEventListener("submit", function(event) {
+      const persona = {
+        nome:    nome,
+        cognome: cognome,
+        eta:     Number(etaRaw)
+      };
 
-      
-            const nome = document.getElementById("nome").value;
-            const cognome = document.getElementById("cognome").value;
-            const eta = parseInt(document.getElementById("eta").value);
+      console.log(persona);
+      console.log('Nome:', persona.nome);
+      console.log('Cognome:', persona.cognome);
+      console.log('Età:', persona.eta);
 
-            const persona = {
-                nome: nome,
-                cognome: cognome,
-                eta: eta
-            };
-
-            console.log(persona);
-        });
-    </script>
+      document.getElementById('nome').value    = '';
+      document.getElementById('cognome').value = '';
+      document.getElementById('eta').value     = '';
+    }
+  </script>
 </body>
 </html>
