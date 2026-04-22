@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ES05-B — Calcolatrice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #000000;
+      --card:   #1c1c1a;
+      --border: #2c2c28;
+      --accent: #e8c97d;
+      --text:   #f0ede8;
+      --muted:  #7a7870;
+      --error:  #e87d7d;
+      --ok:     #7de8a0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .blob {
+      position: fixed;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,201,125,0.12) 0%, transparent 70%);
+      top: -200px; right: -200px;
+      pointer-events: none;
+      animation: blobFloat 8s ease-in-out infinite alternate;
+    }
+
+    .card {
+      position: relative;
+      z-index: 5;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 3rem;
+      width: 100%;
+      max-width: 480px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .tag {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+    .tag::before {
+      content: '';
+      display: inline-block;
+      width: 20px; height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 0.3rem;
+    }
+    h1 span { color: var(--accent); }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.2rem;
+    }
+
+    label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input, select {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input:focus, select:focus {
+      border-color: rgba(232,201,125,0.55);
+    }
+
+    select option { background: #1c1c1a; }
+
+    button {
+      margin-top: 0.8rem;
+      width: 100%;
+      padding: 0.85rem;
+      background: rgba(232,201,125,0.1);
+      border: 1px solid rgba(232,201,125,0.35);
+      border-radius: 8px;
+      color: var(--accent);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+
+    button:hover {
+      background: rgba(232,201,125,0.18);
+      border-color: rgba(232,201,125,0.7);
+      transform: translateY(-1px);
+    }
+
+    .result {
+      margin-top: 1.8rem;
+      padding: 1.2rem 1.4rem;
+      border-radius: 10px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: none;
+      animation: fadeUp 0.35s ease both;
+    }
+
+    .result.ok {
+      background: rgba(125,232,160,0.08);
+      border: 1px solid rgba(125,232,160,0.3);
+      color: var(--ok);
+      display: block;
+    }
+
+    .result.err {
+      background: rgba(232,125,125,0.08);
+      border: 1px solid rgba(232,125,125,0.3);
+      color: var(--error);
+      display: block;
+    }
+
+    .result .res-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 0.3rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blobFloat {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(-40px,60px) scale(1.1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blob"></div>
+
+  <div class="card">
+    <span class="tag">ES06 — A</span>
+    <h1>Calco<span>latrice</span></h1>
+    <p class="subtitle">Inserisci due numeri e scegli un'operazione.</p>
+
+    <div class="field">
+      <label>Primo numero</label>
+      <input type="number" id="num1" placeholder="es. 10" />
+    </div>
+
+    <div class="field">
+      <label>Operazione</label>
+      <select id="op">
+        <option value="">— Seleziona —</option>
+        <option value="+">+ &nbsp; Addizione</option>
+        <option value="-">− &nbsp; Sottrazione</option>
+        <option value="*">× &nbsp; Moltiplicazione</option>
+        <option value="/">÷ &nbsp; Divisione</option>
+        <option value="**">^ &nbsp; Potenza</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Secondo numero</label>
+      <input type="number" id="num2" placeholder="es. 5" />
+    </div>
+
+    <button onclick="calcola()">Calcola</button>
+
+    <div class="result" id="result">
+      <div class="res-label" id="res-label">Risultato</div>
+      <span id="res-text"></span>
+    </div>
+  </div>
+
+  <script>
+    function calcola() {
+      const n1 = document.getElementById('num1').value.trim();
+      const n2 = document.getElementById('num2').value.trim();
+      const op = document.getElementById('op').value;
+      const resultDiv = document.getElementById('result');
+      const resText   = document.getElementById('res-text');
+      const resLabel  = document.getElementById('res-label');
+
+      resultDiv.className = 'result';
+
+      // validazione
+      if (n1 === '' || n2 === '' || op === '') {
+        resLabel.textContent = 'Errore';
+        resText.textContent  = 'Input non valido: compila tutti i campi.';
+        resultDiv.classList.add('err');
+        return;
+      }
+
+      const a = parseFloat(n1);
+      const b = parseFloat(n2);
+
+      if (isNaN(a) || isNaN(b)) {
+        resLabel.textContent = 'Errore';
+        resText.textContent  = 'Input non valido: i valori inseriti non sono numeri.';
+        resultDiv.classList.add('err');
+        return;
+      }
+
+      // calcolo
+      const operazioni = {
+        '+':  (a, b) => a + b,
+        '-':  (a, b) => a - b,
+        '*':  (a, b) => a * b,
+        '/':  (a, b) => a / b,
+        '**': (a, b) => a ** b,
+      };
+
+      if (op === '/' && b === 0) {
+        resLabel.textContent = 'Errore';
+        resText.textContent  = 'Input non valido: divisione per zero non consentita.';
+        resultDiv.classList.add('err');
+        return;
+      }
+
+      if (!operazioni[op]) {
+        resLabel.textContent = 'Errore';
+        resText.textContent  = 'Input non valido: operazione non riconosciuta.';
+        resultDiv.classList.add('err');
+        return;
+      }
+
+      const risultato = operazioni[op](a, b);
+
+      // output
+      resLabel.textContent = `${a} ${op} ${b} =`;
+      resText.textContent  = risultato;
+      resultDiv.classList.add('ok');
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') calcola();
+    });
+  </script>
+
+</body>
+</html>
