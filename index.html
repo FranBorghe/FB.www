@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 
   <style>
-
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -194,8 +193,12 @@
       border-radius: 100px;
     }
 
-    /* TOPIC */
+    /* TOPIC - Layout Accordion */
     .topic {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1.2rem;
       animation: fadeUp 0.6s ease both;
     }
     .topic:nth-child(1) { animation-delay: 0.15s; }
@@ -207,43 +210,87 @@
     .topic-header {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.4rem;
+      justify-content: space-between;
+      padding: 1.4rem 1.8rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .topic-header:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .topic-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .chevron {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: var(--muted);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s;
+    }
+
+    .topic.open .chevron {
+      transform: rotate(180deg);
+      stroke: var(--accent);
     }
 
     .topic-tag {
       font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: 700;
       letter-spacing: -0.01em;
       color: var(--text);
       white-space: nowrap;
+      transition: color 0.3s ease;
     }
 
-    .topic-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
+    .topic.open .topic-tag {
+      color: var(--accent);
     }
 
-    .topic-count {
+    /* Stile Badge */
+    .topic-badge {
       font-size: 0.65rem;
       font-weight: 500;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--muted);
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 4px 12px;
-      border-radius: 6px;
+      color: #e8c97d;
+      border: 1px solid rgba(232,201,125,0.35);
+      background: rgba(232,201,125,0.08);
+      padding: 5px 14px;
+      border-radius: 100px;
+      flex-shrink: 0;
     }
 
-    /* EXERCISE LIST — vertical */
+    /* EXERCISE LIST — Layout a comparsa (Accordion) */
+    .ex-list {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .topic.open .ex-list {
+      grid-template-rows: 1fr;
+    }
+
+    .ex-inner {
+      overflow: hidden;
+    }
+
     .ex-grid {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-bottom: 2.4rem;
+      padding: 0 1.8rem 1.8rem 1.8rem;
     }
 
     .ex-item {
@@ -259,7 +306,7 @@
       text-decoration: none;
       position: relative;
       overflow: hidden;
-      transition: border-color 0.22s, background 0.22s, transform 0.18s, box-shadow 0.22s;
+      transition: border-color 0.22s, background 0.22s, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.22s;
     }
 
     .ex-item::after {
@@ -274,18 +321,18 @@
     .ex-item:hover {
       border-color: rgba(232,201,125,0.55);
       background: rgba(232,201,125,0.04);
-      transform: translateY(-2px);
+      transform: translateX(6px);
       box-shadow: 0 10px 30px rgba(232,201,125,0.1);
     }
 
     .ex-item:hover::after { opacity: 1; }
 
-    /* lettera sinistra */
+    /* lettera sinistra - RESA PIÙ EVIDENTE */
     .ex-letter {
       font-family: 'Playfair Display', serif;
       font-size: 1.9rem;
       font-weight: 900;
-      color: #fff;
+      color: var(--muted); /* Più chiaro e leggibile rispetto a prima */
       line-height: 1;
       position: relative;
       z-index: 1;
@@ -394,8 +441,9 @@
       .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem; gap: 2rem; }
       .hero-stat { grid-template-columns: 1fr 1fr; }
       .ex-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+      .topic-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .topic-badge { align-self: flex-start; }
     }
-
   </style>
 </head>
 <body>
@@ -437,162 +485,186 @@
         <span class="section-count" id="label-count">0 esercizi</span>
       </div>
 
-      <!-- ES02 -->
-      <div class="topic">
+      <div class="topic open">
         <div class="topic-header">
-          <span class="topic-tag">ES02 - Ambiente di sviluppo per Javascript</span>
-          <span class="topic-count"></span>
-          <div class="topic-line"></div>
-        </div>
-        <div class="ex-grid">
-          <a class="ex-item" href="ES02/ES02-0.html">
-            <span class="ex-letter">A</span>
-            <div class="ex-divider"></div>
-            <div class="ex-body">
-              <span class="ex-title">Stampa Hello World</span>
-              <span class="ex-date">27 Feb 2026</span>
-            </div>
-            <span class="ex-arrow">↗</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- ES03 -->
-      <div class="topic">
-        <div class="topic-header">
-          <span class="topic-tag">ES03 - Le basi del linguaggio Javascript</span>
-          <span class="topic-count"></span>
-          <div class="topic-line"></div>
-        </div>
-        <div class="ex-grid">
-          <a class="ex-item" href="ES03/ES03-1.html">
-            <span class="ex-letter">A</span>
-            <div class="ex-divider"></div>
-            <div class="ex-body">
-              <span class="ex-title">Volume Scatola</span>
-              <span class="ex-date">27 Feb 2026</span>
-            </div>
-            <span class="ex-arrow">↗</span>
-          </a>
-          <a class="ex-item" href="ES03/ES03-2.html">
-            <span class="ex-letter">B</span>
-            <div class="ex-divider"></div>
-            <div class="ex-body">
-              <span class="ex-title">Punti di una Retta</span>
-              <span class="ex-date">27 Feb 2026</span>
-            </div>
-            <span class="ex-arrow">↗</span>
-          </a>
-          <a class="ex-item" href="ES03/ES03-3.html">
-            <span class="ex-letter">C</span>
-            <div class="ex-divider"></div>
-            <div class="ex-body">
-              <span class="ex-title">Promosso o Bocciato</span>
-              <span class="ex-date">27 Feb 2026</span>
-            </div>
-            <span class="ex-arrow">↗</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- ES04 -->
-      <div class="topic">
-        <div class="topic-header">
-          <span class="topic-tag">ES04 - Istruzioni decisionali e cicli in Javascript</span>
-          <span class="topic-count"></span>
-          <div class="topic-line"></div>
-        </div>
-        <div class="ex-grid">
-          <a class="ex-item" href="https://github.com/FranBorghe/FB.www/blob/main/ESNode/node1.js">
-            <span class="ex-letter">A</span>
-            <div class="ex-divider"></div>
-            <div class="ex-body">
-              <span class="ex-title">Calcolatrice su linea di comando</span>
-              <span class="ex-date">27 Feb 2026</span>
-            </div>
-            <span class="ex-arrow">↗</span>
-          </a>
-          <a class="ex-item" href="ES04/ES04-B.html">
-            <span class="ex-letter">B</span>
-            <div class="ex-divider"></div>
-            <div class="ex-body">
-              <span class="ex-title">CountDown</span>
-              <span class="ex-date">27 Feb 2026</span>
-            </div>
-            <span class="ex-arrow">↗</span>
-          </a>
-          <a class="ex-item" href="ES04/ES04-C.html">
-            <span class="ex-letter">C</span>
-            <div class="ex-divider"></div>
-            <div class="ex-body">
-              <span class="ex-title">Calcolatrice</span>
-              <span class="ex-date">10 Mar 2026</span>
-            </div>
-            <span class="ex-arrow">↗</span>
-          </a>
-        </div>
-      </div>
-
-      
-     <!-- ES05 -->
-      
-<div class="topic">
-    <div class="topic-header">
-        <span class="topic-tag">ES05 - il tipo dato Oggetto</span>
-        <span class="topic-count"></span>
-        <div class="topic-line"></div>
-    </div>
-    <div class="ex-grid">
-        <a class="ex-item" href="ES05/Es05-A.html">
-          <span class="ex-letter">A</span>
-          <div class="ex-divider"></div>
-          <div class="ex-body">
-            <span class="ex-title">Stampa una Persona</span>
-            <span class="ex-date">17 Mar 2026</span>
+          <div class="topic-header-left">
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <span class="topic-tag">ES02 — Ambiente di sviluppo per Javascript</span>
           </div>
-          <span class="ex-arrow">↗</span>
-        </a>
-        <a class="ex-item" href="https://github.com/FranBorghe/FB.www/blob/main/ES05/Es05-B.js">
-            <span class="ex-letter">B</span>
-            <div class="ex-divider"></div>
-            <div class="ex-body">
-                <span class="ex-title">Ogetto Libero</span>
-                <span class="ex-date">21 Aprile 2026</span>
+          <span class="topic-badge"></span>
+        </div>
+        <div class="ex-list">
+          <div class="ex-inner">
+            <div class="ex-grid">
+              <a class="ex-item" href="ES02/ES02-0.html">
+                <span class="ex-letter">A</span>
+                <div class="ex-divider"></div>
+                <div class="ex-body">
+                  <span class="ex-title">Stampa Hello World</span>
+                  <span class="ex-date">27 Feb 2026</span>
+                </div>
+                <span class="ex-arrow">↗</span>
+              </a>
             </div>
-            <span class="ex-arrow">↗</span>
-        </a>
-    </div>
-</div>
-
-      <!-- ES06 -->
-      
-<div class="topic">
-    <div class="topic-header">
-        <span class="topic-tag">ES06 -  Le funzioni, concetti di base</span>
-        <span class="topic-count"></span>
-        <div class="topic-line"></div>
-    </div>
-    <div class="ex-grid">
-        <a class="ex-item" href="ES06/Es06-A.html">
-          <span class="ex-letter">A</span>
-          <div class="ex-divider"></div>
-          <div class="ex-body">
-            <span class="ex-title">Calcolatrice con "Funzioni"</span>
-            <span class="ex-date">22 Apr 2026</span>
           </div>
-          <span class="ex-arrow">↗</span>
-        </a>
-        <a class="ex-item" href="https://github.com/FranBorghe/FB.www/blob/main/ES06/Es06-B.js">
-          <span class="ex-letter">B</span>
-          <div class="ex-divider"></div>
-            <div class="ex-body">
-              <span class="ex-title">Funzione inverti cifre</span>
-              <span class="ex-date">22 Aprile 2026</span>
+        </div>
+      </div>
+
+      <div class="topic">
+        <div class="topic-header">
+          <div class="topic-header-left">
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <span class="topic-tag">ES03 — Le basi del linguaggio Javascript</span>
+          </div>
+          <span class="topic-badge"></span>
+        </div>
+        <div class="ex-list">
+          <div class="ex-inner">
+            <div class="ex-grid">
+              <a class="ex-item" href="ES03/ES03-1.html">
+                <span class="ex-letter">A</span>
+                <div class="ex-divider"></div>
+                <div class="ex-body">
+                  <span class="ex-title">Volume Scatola</span>
+                  <span class="ex-date">27 Feb 2026</span>
+                </div>
+                <span class="ex-arrow">↗</span>
+              </a>
+              <a class="ex-item" href="ES03/ES03-2.html">
+                <span class="ex-letter">B</span>
+                <div class="ex-divider"></div>
+                <div class="ex-body">
+                  <span class="ex-title">Punti di una Retta</span>
+                  <span class="ex-date">27 Feb 2026</span>
+                </div>
+                <span class="ex-arrow">↗</span>
+              </a>
+              <a class="ex-item" href="ES03/ES03-3.html">
+                <span class="ex-letter">C</span>
+                <div class="ex-divider"></div>
+                <div class="ex-body">
+                  <span class="ex-title">Promosso o Bocciato</span>
+                  <span class="ex-date">27 Feb 2026</span>
+                </div>
+                <span class="ex-arrow">↗</span>
+              </a>
             </div>
-            <span class="ex-arrow">↗</span>
-        </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic">
+        <div class="topic-header">
+          <div class="topic-header-left">
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <span class="topic-tag">ES04 — Istruzioni decisionali e cicli in Javascript</span>
+          </div>
+          <span class="topic-badge"></span>
+        </div>
+        <div class="ex-list">
+          <div class="ex-inner">
+            <div class="ex-grid">
+              <a class="ex-item" href="https://github.com/FranBorghe/FB.www/blob/main/ESNode/node1.js">
+                <span class="ex-letter">A</span>
+                <div class="ex-divider"></div>
+                <div class="ex-body">
+                  <span class="ex-title">Calcolatrice su linea di comando</span>
+                  <span class="ex-date">27 Feb 2026</span>
+                </div>
+                <span class="ex-arrow">↗</span>
+              </a>
+              <a class="ex-item" href="ES04/ES04-B.html">
+                <span class="ex-letter">B</span>
+                <div class="ex-divider"></div>
+                <div class="ex-body">
+                  <span class="ex-title">CountDown</span>
+                  <span class="ex-date">27 Feb 2026</span>
+                </div>
+                <span class="ex-arrow">↗</span>
+              </a>
+              <a class="ex-item" href="ES04/ES04-C.html">
+                <span class="ex-letter">C</span>
+                <div class="ex-divider"></div>
+                <div class="ex-body">
+                  <span class="ex-title">Calcolatrice</span>
+                  <span class="ex-date">10 Mar 2026</span>
+                </div>
+                <span class="ex-arrow">↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic">
+        <div class="topic-header">
+          <div class="topic-header-left">
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <span class="topic-tag">ES05 — Il tipo dato Oggetto</span>
+          </div>
+          <span class="topic-badge"></span>
+        </div>
+        <div class="ex-list">
+          <div class="ex-inner">
+            <div class="ex-grid">
+              <a class="ex-item" href="ES05/Es05-A.html">
+                <span class="ex-letter">A</span>
+                <div class="ex-divider"></div>
+                <div class="ex-body">
+                  <span class="ex-title">Stampa una Persona</span>
+                  <span class="ex-date">17 Mar 2026</span>
+                </div>
+                <span class="ex-arrow">↗</span>
+              </a>
+              <a class="ex-item" href="https://github.com/FranBorghe/FB.www/blob/main/ES05/Es05-B.js">
+                <span class="ex-letter">B</span>
+                <div class="ex-divider"></div>
+                <div class="ex-body">
+                  <span class="ex-title">Oggetto Libero</span>
+                  <span class="ex-date">21 Apr 2026</span>
+                </div>
+                <span class="ex-arrow">↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic">
+        <div class="topic-header">
+          <div class="topic-header-left">
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <span class="topic-tag">ES06 — Le funzioni, concetti di base</span>
+          </div>
+          <span class="topic-badge"></span>
+        </div>
+        <div class="ex-list">
+          <div class="ex-inner">
+            <div class="ex-grid">
+              <a class="ex-item" href="ES06/Es06-A.html">
+                <span class="ex-letter">A</span>
+                <div class="ex-divider"></div>
+                <div class="ex-body">
+                  <span class="ex-title">Calcolatrice con "Funzioni"</span>
+                  <span class="ex-date">22 Apr 2026</span>
+                </div>
+                <span class="ex-arrow">↗</span>
+              </a>
+              <a class="ex-item" href="https://github.com/FranBorghe/FB.www/blob/main/ES06/Es06-B.js">
+                <span class="ex-letter">B</span>
+                <div class="ex-divider"></div>
+                <div class="ex-body">
+                  <span class="ex-title">Funzione inverti cifre</span>
+                  <span class="ex-date">22 Apr 2026</span>
+                </div>
+                <span class="ex-arrow">↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
-</div>
   </main>
 
   <footer>
@@ -601,6 +673,7 @@
   </footer>
 
   <script>
+    // --- Logica contatori ---
     const allEx = document.querySelectorAll('.ex-item');
     const total = allEx.length;
 
@@ -609,10 +682,19 @@
       total === 0 ? 'Nessun esercizio' :
       total === 1 ? '1 esercizio' : `${total} esercizi`;
 
+    // Aggiorna i badge .topic-badge
     document.querySelectorAll('.topic').forEach(topic => {
       const n = topic.querySelectorAll('.ex-item').length;
-      const el = topic.querySelector('.topic-count');
+      const el = topic.querySelector('.topic-badge');
       if (el) el.textContent = n === 1 ? '1 esercizio' : `${n} esercizi`;
+    });
+
+    // --- Logica Accordion ---
+    document.querySelectorAll('.topic-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const topic = header.closest('.topic');
+        topic.classList.toggle('open');
+      });
     });
   </script>
 
