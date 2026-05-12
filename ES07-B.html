@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -34,11 +33,14 @@
   <h1>Esercizio B – Oggetto <code>navigator</code></h1>
   <p>Premi il pulsante e apri la Console del browser (F12) per vedere le proprietà.</p>
   <button onclick="esercizioB()">Esegui</button>
- 
+
   <script>
-    for(key in navigator){
-        console.log(key);
+    function esercizioB() {
+      console.log("=== Proprietà oggetto navigator ===");
+      for (let key in navigator) {
+        console.log(key + ":", navigator[key]);
+      }
     }
-</script>
+  </script>
 </body>
 </html>
