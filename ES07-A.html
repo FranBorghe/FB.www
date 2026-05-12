@@ -33,11 +33,14 @@
   <h1>Esercizio A – Oggetto <code>window</code></h1>
   <p>Premi il pulsante e apri la Console del browser (F12) per vedere le proprietà.</p>
   <button onclick="esercizioA()">Esegui</button>
- 
+
   <script>
-    for(key in window){
-        console.log(key);
+    function esercizioA() {
+      console.log("=== Proprietà oggetto window ===");
+      for (let key in window) {
+        console.log(key + ":", window[key]);
+      }
     }
-</script>
+  </script>
 </body>
 </html>
