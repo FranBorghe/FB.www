@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tavola Pitagorica</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      gap: 1rem;
+    }
+
+    h1 {
+      font-size: 1.2rem;
+    }
+
+    table {
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    td {
+      width: 40px;
+      height: 32px;
+      text-align: center;
+      border: 1px solid #bbb;
+    }
+
+  
+    tr:first-child td,
+    td:first-child {
+      font-weight: bold;
+    }
+
+ 
+    tr.evidenziato td {
+      background: #cce5ff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tavola Pitagorica 10×10</h1>
+  <div id="contenitore"></div>
+
+  <script>
+    const contenitore = document.getElementById("contenitore");
+
+    // Creazione della tabella
+    const table = document.createElement("table");
+
+    // --- Riga di intestazione (×, 1, 2, ... 10) ---
+    const rigaHeader = document.createElement("tr");
+
+    const tdAngolo = document.createElement("td");
+    tdAngolo.textContent = "×";
+    rigaHeader.appendChild(tdAngolo);
+
+    for (let col = 1; col <= 10; col++) {
+      const td = document.createElement("td");
+      td.textContent = col;
+      rigaHeader.appendChild(td);
+    }
+
+    table.appendChild(rigaHeader);
+
+    for (let riga = 1; riga <= 10; riga++) {
+      const tr = document.createElement("tr");
+
+  
+      if (riga % 2 !== 0) {
+        tr.setAttribute("class", "evidenziato");
+      }
+
+   
+      const tdHeader = document.createElement("td");
+      tdHeader.textContent = riga;
+      tr.appendChild(tdHeader);
+
+      
+      for (let col = 1; col <= 10; col++) {
+        const td = document.createElement("td");
+        td.textContent = riga * col;
+        tr.appendChild(td);
+      }
+
+      table.appendChild(tr);
+    }
+
+ 
+    contenitore.appendChild(table);
+  </script>
+</body>
+</html>
