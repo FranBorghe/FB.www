@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#2545FF"/>
   <title>Francesco Borghetti — TPS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Onest:wght@400;500;600&display=swap" rel="stylesheet"/>
 
   <style>
     *, *::before, *::after {
@@ -14,750 +17,438 @@
     }
 
     :root {
-      --bg:      #000000;
-      --card:    #1c1c1a;
-      --border:  #2c2c28;
-      --accent:  #e8c97d;
-      --accent2: #c4a45a;
-      --text:    #f0ede8;
-      --muted:   #7a7870;
-      --hover:   #232320;
+      --ground: #ECEEF3;
+      --ink:    #14151F;
+      --white:  #FFFFFF;
+      --blue:   #2545FF;
+      --lime:   #C6FF3D;
+      --coral:  #FF5C4D;
+
+      --gap:    16px;
+      --edge:   24px;
+      --radius: 28px;
+      --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+
+      --display: 'Bricolage Grotesque', 'Onest', sans-serif;
+      --text:    'Onest', system-ui, sans-serif;
+    }
+
+    html {
+      scrollbar-color: var(--ink) var(--ground);
     }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      min-height: 100vh;
-      overflow-x: hidden;
+      background: var(--ground);
+      color: var(--ink);
+      font-family: var(--text);
+      font-size: 1rem;
+      line-height: 1.4;
+      padding: var(--edge);
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .blob {
-      position: fixed;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(232,201,125,0.14) 0%, transparent 70%);
-      top: -200px;
-      right: -200px;
-      pointer-events: none;
-      z-index: 1;
-      animation: blobFloat 8s ease-in-out infinite alternate;
+    ::selection {
+      background: var(--ink);
+      color: var(--white);
     }
 
-    header {
-      position: relative;
-      z-index: 10;
-      padding: 3rem 4rem 2rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 2rem;
-      animation: fadeDown 0.8s ease both;
+    /* PAGINA — pannello a sinistra, tessere a destra */
+    .page {
+      display: grid;
+      grid-template-columns: 4fr 8fr;
+      gap: var(--gap);
+      align-items: start;
     }
 
-    .header-left {
+    .tile {
+      border-radius: var(--radius);
+      animation: rise 0.8s var(--ease) backwards;
+      animation-delay: calc(var(--i, 0) * 70ms);
+    }
+
+    /* PANNELLO INTRO */
+    .intro {
+      --i: 0;
+      background: var(--blue);
+      color: var(--white);
+      padding: 36px;
+      min-height: calc(100dvh - var(--edge) * 2);
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
-    }
-
-    .tag {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .tag::before {
-      content: '';
-      display: inline-block;
-      width: 20px;
-      height: 1px;
-      background: var(--accent);
+      justify-content: space-between;
+      gap: 48px;
     }
 
     h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.2rem, 5vw, 4rem);
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -0.02em;
-      color: var(--text);
-    }
-    h1 span { color: var(--accent); }
-
-    .header-right {
-      text-align: right;
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.8;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: clamp(3.5rem, 6.6vw, 6rem);
+      line-height: 0.88;
+      letter-spacing: -0.035em;
+      text-wrap: balance;
     }
 
-    .hero {
-      position: relative;
-      z-index: 5;
-      padding: 5rem 4rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-      animation: fadeUp 0.9s 0.2s ease both;
+    .who {
+      font-size: 1.125rem;
+      line-height: 1.45;
     }
 
-    .hero-text h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.6rem, 3vw, 2.6rem);
-      font-weight: 400;
-      line-height: 1.3;
-      margin-bottom: 1.2rem;
-    }
-
-    .hero-text p {
-      font-size: 0.95rem;
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 38ch;
-    }
-
-    .hero-stat {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .stat-box {
-      background: var(--card);
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .stat-box .num {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--accent);
-    }
-
-    .stat-box .label {
-      font-size: 0.75rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    main {
-      position: relative;
-      z-index: 5;
-      padding: 0 4rem 6rem;
-      display: flex;
-      flex-direction: column;
-      gap: 3.5rem;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
+    .who strong {
+      display: block;
       font-size: 1.5rem;
-      font-weight: 700;
+      font-weight: 600;
+      line-height: 1.25;
+      margin-bottom: 4px;
     }
 
-    .section-count {
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid rgba(232,201,125,0.3);
-      background: rgba(232,201,125,0.07);
-      padding: 5px 14px;
-      border-radius: 100px;
-    }
-
-    /* TOPIC - Layout Accordion */
-    .topic {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 1.2rem;
-      animation: fadeUp 0.6s ease both;
-    }
-    .topic:nth-child(1) { animation-delay: 0.15s; }
-    .topic:nth-child(2) { animation-delay: 0.25s; }
-    .topic:nth-child(3) { animation-delay: 0.35s; }
-    .topic:nth-child(4) { animation-delay: 0.45s; }
-    .topic:nth-child(5) { animation-delay: 0.55s; }
-
-    .topic-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.4rem 1.8rem;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.3s ease;
-    }
-
-    .topic-header:hover {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .topic-header-left {
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-    }
-
-    .chevron {
-      width: 22px;
-      height: 22px;
-      fill: none;
-      stroke: var(--muted);
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s;
-    }
-
-    .topic.open .chevron {
-      transform: rotate(180deg);
-      stroke: var(--accent);
-    }
-
-    .topic-tag {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      white-space: nowrap;
-      transition: color 0.3s ease;
-    }
-
-    .topic.open .topic-tag {
-      color: var(--accent);
-    }
-
-    /* Stile Badge */
-    .topic-badge {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #e8c97d;
-      border: 1px solid rgba(232,201,125,0.35);
-      background: rgba(232,201,125,0.08);
-      padding: 5px 14px;
-      border-radius: 100px;
-      flex-shrink: 0;
-    }
-
-    /* EXERCISE LIST — Layout a comparsa (Accordion) */
-    .ex-list {
+    .facts {
       display: grid;
-      grid-template-rows: 0fr;
-      transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 28px;
     }
 
-    .topic.open .ex-list {
-      grid-template-rows: 1fr;
+    .facts div {
+      background: var(--white);
+      color: var(--ink);
+      border-radius: 18px;
+      padding: 14px 18px 16px;
+      font-size: 0.9375rem;
     }
 
-    .ex-inner {
-      overflow: hidden;
-    }
-
-    .ex-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 0 1.8rem 1.8rem 1.8rem;
-    }
-
-    .ex-item {
-      display: grid;
-      grid-template-columns: 48px 1fr auto;
-      align-items: center;
-      gap: 20px;
-      padding: 20px 28px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text);
-      text-decoration: none;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.22s, background 0.22s, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.22s;
-    }
-
-    .ex-item::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(232,201,125,0.06) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-
-    .ex-item:hover {
-      border-color: rgba(232,201,125,0.55);
-      background: rgba(232,201,125,0.04);
-      transform: translateX(6px);
-      box-shadow: 0 10px 30px rgba(232,201,125,0.1);
-    }
-
-    .ex-item:hover::after { opacity: 1; }
-
-    /* lettera sinistra - RESA PIÙ EVIDENTE */
-    .ex-letter {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.9rem;
-      font-weight: 900;
-      color: var(--muted); /* Più chiaro e leggibile rispetto a prima */
+    .facts b {
+      display: block;
+      font-family: var(--display);
+      font-size: 2.75rem;
+      font-weight: 700;
       line-height: 1;
-      position: relative;
-      z-index: 1;
-      transition: color 0.22s, text-shadow 0.22s;
-      text-align: center;
+      font-variant-numeric: tabular-nums;
     }
 
-    .ex-item:hover .ex-letter {
-      color: var(--accent);
-      text-shadow: 0 0 20px rgba(232,201,125,0.5);
+    .note {
+      margin-top: 24px;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 6px 24px;
     }
 
-    /* divisore verticale */
-    .ex-divider {
-      position: absolute;
-      left: 76px;
-      top: 16px;
-      bottom: 16px;
-      width: 1px;
-      background: var(--border);
-      transition: background 0.22s;
+    /* TESSERE — una per unità; larghezza e colore seguono l'ordine */
+    .units {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-auto-rows: auto;
+      gap: var(--gap);
+      min-height: calc(100dvh - var(--edge) * 2);
     }
 
-    .ex-item:hover .ex-divider {
-      background: rgba(232,201,125,0.25);
-    }
+    .unit {
+      --bg:     var(--white);
+      --fg:     var(--ink);
+      --row:    var(--blue);
+      --row-fg: var(--white);
+      --chip:   var(--bg);
+      --chip-fg: var(--fg);
+      --hov:    var(--bg);
+      --hov-fg: var(--fg);
 
-    /* contenuto centrale */
-    .ex-body {
+      grid-column: span 3;
+      container-type: inline-size;
+      background: var(--bg);
+      color: var(--fg);
+      padding: 22px 24px 24px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      min-width: 0;
-      position: relative;
-      z-index: 1;
+      gap: 20px;
     }
 
-    .ex-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: 0.01em;
-      transition: color 0.2s;
+    .unit:nth-child(4n + 2),
+    .unit:nth-child(4n + 3) { grid-column: span 5; }
+    .unit:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+    /* blu, lime e corallo, più bianco e nero: sfondo e blocchi sempre in contrasto */
+    .unit:nth-child(6n + 1) { --bg: var(--coral); --fg: var(--ink);   --row: var(--white); --row-fg: var(--ink); }
+    .unit:nth-child(6n + 2) { --bg: var(--lime);  --fg: var(--ink);   --row: var(--ink);   --row-fg: var(--white); }
+    .unit:nth-child(6n + 3) { --bg: var(--ink);   --fg: var(--white); --row: var(--blue);  --row-fg: var(--white); }
+    .unit:nth-child(6n + 4) { --bg: var(--blue);  --fg: var(--white); --row: var(--ink);   --row-fg: var(--white); }
+    .unit:nth-child(6n + 5) { --bg: var(--lime);  --fg: var(--ink);   --row: var(--ink);   --row-fg: var(--white); }
+    .unit:nth-child(6n)     { --bg: var(--coral); --fg: var(--ink);   --row: var(--white); --row-fg: var(--ink); }
+
+    .unit:nth-child(1) { --i: 1; }
+    .unit:nth-child(2) { --i: 2; }
+    .unit:nth-child(3) { --i: 3; }
+    .unit:nth-child(4) { --i: 4; }
+    .unit:nth-child(5) { --i: 5; }
+    .unit:nth-child(n + 6) { --i: 6; }
+
+    h2 {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      font-size: 1.0625rem;
+      font-weight: 600;
+      line-height: 1.2;
+      text-wrap: balance;
     }
 
-    .ex-item:hover .ex-title {
-      color: var(--accent);
-    }
-
-    .ex-date {
-      font-size: 0.68rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    /* freccia destra */
-    .ex-arrow {
-      font-size: 1rem;
-      color: var(--muted);
+    .num {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 3.375rem;
+      line-height: 0.8;
+      letter-spacing: -0.03em;
       flex-shrink: 0;
-      position: relative;
-      z-index: 1;
-      transition: color 0.2s, transform 0.2s;
     }
 
-    .ex-item:hover .ex-arrow {
-      color: var(--accent);
+    .num small {
+      font-size: 0.3em;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-right: 3px;
+    }
+
+    /* ESERCIZI — ogni blocco è il link */
+    .list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(138px, 1fr));
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .ex {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto 1fr auto;
+      grid-template-areas:
+        "chip  arrow"
+        "title title"
+        "date  date";
+      gap: 4px 8px;
+      min-height: 128px;
+      padding: 12px 14px 14px 12px;
+      border-radius: 20px;
+      background: var(--row);
+      color: var(--row-fg);
+      text-decoration: none;
+      box-shadow: 0 1px 2px rgba(20, 20, 43, 0.08);
+      transition: background-color 0.3s var(--ease), color 0.3s var(--ease),
+                  transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+    }
+
+    .ex b {
+      grid-area: chip;
+      justify-self: start;
+      min-width: 40px;
+      height: 40px;
+      padding: 0 10px;
+      border-radius: 13px;
+      background: var(--chip);
+      color: var(--chip-fg);
+      display: grid;
+      place-items: center;
+      font-family: var(--display);
+      font-size: 1.375rem;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
+      transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+    }
+
+    .ex span {
+      grid-area: title;
+      align-self: end;
+      margin-top: 14px;
+      font-size: 1.125rem;
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      overflow-wrap: anywhere;
+    }
+
+    .ex time {
+      grid-area: date;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* sorgente .js su GitHub, non una pagina eseguibile */
+    .src time::after {
+      content: 'JS';
+      display: inline-block;
+      margin-left: 8px;
+      padding: 1px 6px;
+      border: 1.5px solid currentColor;
+      border-radius: 6px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .ex::after {
+      content: '';
+      grid-area: arrow;
+      align-self: start;
+      width: 18px;
+      height: 18px;
+      margin: 4px 2px 0 0;
+      background: currentColor;
+      -webkit-mask: var(--arrow) center / contain no-repeat;
+              mask: var(--arrow) center / contain no-repeat;
+      --arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 18L18 6M8 6h10v10'/%3E%3C/svg%3E");
+      transition: transform 0.4s var(--ease);
+    }
+
+    .ex:hover,
+    .ex:focus-visible {
+      background: var(--hov);
+      color: var(--hov-fg);
+      transform: translateY(-4px);
+      box-shadow: inset 0 0 0 2px var(--row), 0 14px 28px -12px rgba(20, 21, 31, 0.45);
+    }
+
+    .ex:hover b,
+    .ex:focus-visible b {
+      background: var(--row);
+      color: var(--row-fg);
+    }
+
+    .ex:hover::after,
+    .ex:focus-visible::after {
       transform: translate(3px, -3px);
     }
 
-    footer {
-      position: relative;
-      z-index: 5;
-      padding: 2rem 4rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: var(--muted);
+    .ex:focus-visible {
+      outline: 3px solid var(--fg);
+      outline-offset: 2px;
     }
 
-    .footer-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.9rem;
-      color: var(--text);
+    .ex:active { transform: translateY(-1px) scale(0.985); }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+        filter: blur(8px);
+      }
     }
 
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes blobFloat {
-      from { transform: translate(0, 0) scale(1); }
-      to   { transform: translate(-40px, 60px) scale(1.1); }
+    @media (prefers-reduced-motion: reduce) {
+      .tile { animation: none; }
+      .ex, .ex b, .ex::after { transition: none; }
+      .ex:hover, .ex:focus-visible { transform: none; }
     }
 
-    @media (max-width: 768px) {
-      header, main, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
-      .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem; gap: 2rem; }
-      .hero-stat { grid-template-columns: 1fr 1fr; }
-      .ex-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-      .topic-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-      .topic-badge { align-self: flex-start; }
+    @media (min-width: 1101px) and (min-height: 640px) {
+      .intro { position: sticky; top: var(--edge); }
+    }
+
+    @media (max-width: 1100px) {
+      .page { grid-template-columns: 1fr; }
+      .intro { min-height: 0; gap: 40px; }
+      .units { min-height: 0; grid-auto-rows: auto; }
+    }
+
+    @media (max-width: 720px) {
+      :root { --edge: 16px; --gap: 12px; --radius: 22px; }
+      .intro { padding: 28px 24px 24px; }
+      .unit, .unit:nth-child(n) { grid-column: 1 / -1; padding: 20px 16px 16px; }
+      .unit h2 { padding: 0 6px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="blob"></div>
+  <div class="page">
 
-  <header>
-    <div class="header-left">
-      <span class="tag">TPS — Tecnologie e Progettazione</span>
-      <h1>Francesco <span>Borghetti</span></h1>
-    </div>
-    <div class="header-right">
-      Anno Scolastico 2025 / 2026<br>
-      Esercizi &amp; Lavori Svolti
-    </div>
-  </header>
+    <header class="tile intro">
+      <h1>Esercizi di TPS</h1>
+      <div>
+        <p class="who">
+          <strong>Francesco Borghetti</strong>
+          Tecnologie e Progettazione<br>
+          Anno scolastico 2025 / 2026
+        </p>
+        <div class="facts">
+          <div><b id="count-total">16</b><span id="label-total">esercizi</span></div>
+          <div><b id="count-units">6</b>unità</div>
+        </div>
+        <p class="note">
+          <span>JS = sorgente su GitHub</span>
+          <span>Tutti i diritti riservati © 2026</span>
+        </p>
+      </div>
+    </header>
 
-  <section class="hero">
-    <div class="hero-text">
-      <h2>Raccolta degli<br>esercizi svolti</h2>
-      <p>In questa pagina trovi tutti i link agli esercizi completati, organizzati per argomento. Clicca su un esercizio per aprire il relativo elaborato.</p>
-    </div>
-    <div class="hero-stat">
-      <div class="stat-box">
-        <span class="num" id="count-total">0</span>
-        <span class="label">Esercizi totali</span>
-      </div>
-      <div class="stat-box">
-        <span class="num">25/26</span>
-        <span class="label">Anno scolastico</span>
-      </div>
-    </div>
-  </section>
-
-  <main>
-    <div>
-      <div class="section-header">
-        <span class="section-title">Argomenti</span>
-        <span class="section-count" id="label-count">0 esercizi</span>
-      </div>
+    <main class="units">
 <!-- ES02 -->
-      <div class="topic open">
-        <div class="topic-header">
-          <div class="topic-header-left">
-            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-            <span class="topic-tag">ES02 — Ambiente di sviluppo per Javascript</span>
-          </div>
-          <span class="topic-badge"></span>
+      <section class="tile unit">
+        <h2><span class="num"><small>ES</small>02</span>Ambiente di sviluppo per Javascript</h2>
+        <div class="list">
+          <a class="ex" href="ES02/ES02-0.html"><b>A</b><span>Stampa Hello World</span><time datetime="2026-02-27">27 feb</time></a>
         </div>
-        <div class="ex-list">
-          <div class="ex-inner">
-            <div class="ex-grid">
-              <a class="ex-item" href="ES02/ES02-0.html">
-                <span class="ex-letter">A</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Stampa Hello World</span>
-                  <span class="ex-date">27 Feb 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
 <!-- ES03 -->
-      <div class="topic">
-        <div class="topic-header">
-          <div class="topic-header-left">
-            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-            <span class="topic-tag">ES03 — Le basi del linguaggio Javascript</span>
-          </div>
-          <span class="topic-badge"></span>
+      <section class="tile unit">
+        <h2><span class="num"><small>ES</small>03</span>Le basi del linguaggio Javascript</h2>
+        <div class="list">
+          <a class="ex" href="ES03/ES03-1.html"><b>A</b><span>Volume Scatola</span><time datetime="2026-02-27">27 feb</time></a>
+          <a class="ex" href="ES03/ES03-2.html"><b>B</b><span>Punti di una Retta</span><time datetime="2026-02-27">27 feb</time></a>
+          <a class="ex" href="ES03/ES03-3.html"><b>C</b><span>Promosso o Bocciato</span><time datetime="2026-02-27">27 feb</time></a>
         </div>
-        <div class="ex-list">
-          <div class="ex-inner">
-            <div class="ex-grid">
-              <a class="ex-item" href="ES03/ES03-1.html">
-                <span class="ex-letter">A</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Volume Scatola</span>
-                  <span class="ex-date">27 Feb 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-              <a class="ex-item" href="ES03/ES03-2.html">
-                <span class="ex-letter">B</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Punti di una Retta</span>
-                  <span class="ex-date">27 Feb 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-              <a class="ex-item" href="ES03/ES03-3.html">
-                <span class="ex-letter">C</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Promosso o Bocciato</span>
-                  <span class="ex-date">27 Feb 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
 <!-- ES04 -->
-      <div class="topic">
-        <div class="topic-header">
-          <div class="topic-header-left">
-            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-            <span class="topic-tag">ES04 — Istruzioni decisionali e cicli in Javascript</span>
-          </div>
-          <span class="topic-badge"></span>
+      <section class="tile unit">
+        <h2><span class="num"><small>ES</small>04</span>Istruzioni decisionali e cicli in Javascript</h2>
+        <div class="list">
+          <a class="ex src" href="https://github.com/FranBorghe/FB.www/blob/main/ESNode/calcolatrice.js"><b>A</b><span>Calcolatrice su linea di comando</span><time datetime="2026-02-27">27 feb</time></a>
+          <a class="ex" href="ES04/ES04-B.html"><b>B</b><span>CountDown</span><time datetime="2026-02-27">27 feb</time></a>
+          <a class="ex" href="ES04/ES04-C.html"><b>C</b><span>Calcolatrice</span><time datetime="2026-03-10">10 mar</time></a>
         </div>
-        <div class="ex-list">
-          <div class="ex-inner">
-            <div class="ex-grid">
-              <a class="ex-item" href="https://github.com/FranBorghe/FB.www/blob/main/ESNode/node1.js">
-                <span class="ex-letter">A</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Calcolatrice su linea di comando</span>
-                  <span class="ex-date">27 Feb 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-              <a class="ex-item" href="ES04/ES04-B.html">
-                <span class="ex-letter">B</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">CountDown</span>
-                  <span class="ex-date">27 Feb 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-              <a class="ex-item" href="ES04/ES04-C.html">
-                <span class="ex-letter">C</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Calcolatrice</span>
-                  <span class="ex-date">10 Mar 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
 <!-- ES05 -->
-      <div class="topic">
-        <div class="topic-header">
-          <div class="topic-header-left">
-            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-            <span class="topic-tag">ES05 — Il tipo dato Oggetto</span>
-          </div>
-          <span class="topic-badge"></span>
+      <section class="tile unit">
+        <h2><span class="num"><small>ES</small>05</span>Il tipo dato Oggetto</h2>
+        <div class="list">
+          <a class="ex" href="ES05/Es05-A.html"><b>A</b><span>Stampa una Persona</span><time datetime="2026-03-17">17 mar</time></a>
+          <a class="ex src" href="https://github.com/FranBorghe/FB.www/blob/main/ES05/Es05-B.js"><b>B</b><span>Oggetto Libero</span><time datetime="2026-04-21">21 apr</time></a>
         </div>
-        <div class="ex-list">
-          <div class="ex-inner">
-            <div class="ex-grid">
-              <a class="ex-item" href="ES05/Es05-A.html">
-                <span class="ex-letter">A</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Stampa una Persona</span>
-                  <span class="ex-date">17 Mar 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-              <a class="ex-item" href="https://github.com/FranBorghe/FB.www/blob/main/ES05/Es05-B.js">
-                <span class="ex-letter">B</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Oggetto Libero</span>
-                  <span class="ex-date">21 Apr 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
 <!-- ES06 -->
-      <div class="topic">
-        <div class="topic-header">
-          <div class="topic-header-left">
-            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-            <span class="topic-tag">ES06 — Le funzioni, concetti di base</span>
-          </div>
-          <span class="topic-badge"></span>
+      <section class="tile unit">
+        <h2><span class="num"><small>ES</small>06</span>Le funzioni, concetti di base</h2>
+        <div class="list">
+          <a class="ex" href="ES06/Es06-A.html"><b>A</b><span>Calcolatrice con "Funzioni"</span><time datetime="2026-04-22">22 apr</time></a>
+          <a class="ex src" href="https://github.com/FranBorghe/FB.www/blob/main/ES06/Es06-B.js"><b>B</b><span>Funzione inverti cifre</span><time datetime="2026-04-22">22 apr</time></a>
         </div>
-        <div class="ex-list">
-          <div class="ex-inner">
-            <div class="ex-grid">
-              <a class="ex-item" href="ES06/Es06-A.html">
-                <span class="ex-letter">A</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Calcolatrice con "Funzioni"</span>
-                  <span class="ex-date">22 Apr 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-              <a class="ex-item" href="https://github.com/FranBorghe/FB.www/blob/main/ES06/Es06-B.js">
-                <span class="ex-letter">B</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Funzione inverti cifre</span>
-                  <span class="ex-date">22 Apr 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
 <!-- ES07 -->
-      <div class="topic">
-        <div class="topic-header">
-          <div class="topic-header-left">
-            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-            <span class="topic-tag">ES07 — Introduzione al DOM e gestione dei nodi</span>
-          </div>
-          <span class="topic-badge"></span>
+      <section class="tile unit">
+        <h2><span class="num"><small>ES</small>07</span>Introduzione al DOM e gestione dei nodi</h2>
+        <div class="list">
+          <a class="ex" href="ES07/Es07-A.html"><b>A</b><span>Proprietà principali dell’oggetto windows</span><time datetime="2026-05-18">18 mag</time></a>
+          <a class="ex" href="ES07/Es07-B.html"><b>B</b><span>Proprietà principali dell’oggetto navigator</span><time datetime="2026-05-18">18 mag</time></a>
+          <a class="ex" href="ES07/Es07-C.html"><b>C</b><span>Modificare il colore e lo sfondo dei pulsanti</span><time datetime="2026-05-18">18 mag</time></a>
+          <a class="ex" href="ES07/Es07-D.html"><b>D</b><span>Convertire il testo in maiuscolo</span><time datetime="2026-05-18">18 mag</time></a>
+          <a class="ex" href="ES07/Es07-E-F.html"><b>E / F</b><span>Tabella Pitagorica</span><time datetime="2026-05-18">18 mag</time></a>
         </div>
-        <div class="ex-list">
-          <div class="ex-inner">
-            <div class="ex-grid">
-              <a class="ex-item" href="ES07/Es07-A.html">
-                <span class="ex-letter">A</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Proprietà principali dell’oggetto windows</span>
-                  <span class="ex-date">18 Mag 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-              <a class="ex-item" href=ES07/Es07-B.html>
-                <span class="ex-letter">B</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Proprietà principali dell’oggetto navigator</span>
-                  <span class="ex-date">18 Mag 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-              <a class="ex-item" href=ES07/Es07-C.html>
-                <span class="ex-letter">C</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Modificare il colore e lo sfondo dei pulsanti</span>
-                  <span class="ex-date">18 Mag 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-              <a class="ex-item" href=ES07/Es07-D.html>
-                <span class="ex-letter">D</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Convertire il testo in maiuscolo</span>
-                  <span class="ex-date">18 Mag 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-              <a class="ex-item" href=ES07/Es07-E-F.html>
-                <span class="ex-letter">E / F</span>
-                <div class="ex-divider"></div>
-                <div class="ex-body">
-                  <span class="ex-title">Tabella Pitagorica</span>
-                  <span class="ex-date">18 Mag 2026</span>
-                </div>
-                <span class="ex-arrow">↗</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
 
-      
-    </div>
-  </main>
+    </main>
 
-  <footer>
-    <span class="footer-name">Francesco Borghetti</span>
-    <span>Tutti i diritti riservati © 2026</span>
-  </footer>
+  </div>
 
   <script>
     // --- Logica contatori ---
-    const allEx = document.querySelectorAll('.ex-item');
-    const total = allEx.length;
+    const total = document.querySelectorAll('.ex').length;
+    const units = document.querySelectorAll('.unit').length;
 
     document.getElementById('count-total').textContent = total;
-    document.getElementById('label-count').textContent =
-      total === 0 ? 'Nessun esercizio' :
-      total === 1 ? '1 esercizio' : `${total} esercizi`;
-
-    // Aggiorna i badge .topic-badge
-    document.querySelectorAll('.topic').forEach(topic => {
-      const n = topic.querySelectorAll('.ex-item').length;
-      const el = topic.querySelector('.topic-badge');
-      if (el) el.textContent = n === 1 ? '1 esercizio' : `${n} esercizi`;
-    });
-
-    // --- Logica Accordion ---
-    document.querySelectorAll('.topic-header').forEach(header => {
-      header.addEventListener('click', () => {
-        const topic = header.closest('.topic');
-        topic.classList.toggle('open');
-      });
-    });
+    document.getElementById('label-total').textContent = total === 1 ? 'esercizio' : 'esercizi';
+    document.getElementById('count-units').textContent = units;
   </script>
 
 </body>
